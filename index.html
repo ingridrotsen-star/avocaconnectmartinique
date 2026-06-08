@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AvocaConnect Martinique</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bleu:#1E3557;--bleu-pale:#243f6a;
+  --or:#C9A55A;--or-clair:#d9b878;--or-pale:#f0dba8;
+  --blanc:#F8F6F2;--blanc-pur:#ffffff;
+  --gris:#e8e4db;--gris-f:#6b6357;
+  --vert:#4ac178;--rouge:#e05252;
+  --ombre:rgba(30,53,87,0.13);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;font-family:'Jost',sans-serif;background:var(--bleu);}
+
+/* ── PAGES ── */
+.page{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transform:translateX(60px);transition:opacity .38s ease,transform .38s ease;}
+.page.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.page.exit-left{opacity:0;transform:translateX(-60px);}
+
+/* ── NAV ── */
+nav{flex-shrink:0;background:rgba(30,53,87,.97);backdrop-filter:blur(12px);padding:0 1.5rem;height:58px;min-height:58px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,165,90,.25);position:sticky;top:0;z-index:10;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--blanc);letter-spacing:.04em;}
+.nav-logo span{color:var(--or);}
+.btn-retour{display:flex;align-items:center;gap:.4rem;background:transparent;border:1px solid rgba(201,165,90,.35);color:rgba(248,246,242,.8);font-family:'Jost',sans-serif;font-size:.78rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;border-radius:2px;cursor:pointer;transition:all .2s;}
+.btn-retour:hover{border-color:var(--or);color:var(--or);}
+.nav-etape{font-size:.72rem;color:rgba(201,165,90,.6);letter-spacing:.12em;text-transform:uppercase;}
+
+/* ── PROGRESS ── */
+.progress-bar{height:3px;background:rgba(201,165,90,.15);flex-shrink:0;}
+.progress-fill{height:100%;background:var(--or);transition:width .5s ease;}
+
+/* ── BTNS ── */
+.btn-or{display:inline-flex;align-items:center;gap:.7rem;background:var(--or);color:var(--bleu);font-family:'Jost',sans-serif;font-size:.92rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:1rem 2.5rem;border:none;border-radius:2px;cursor:pointer;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 24px rgba(201,165,90,.35);}
+.btn-or:hover{background:var(--or-clair);transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,165,90,.45);}
+.page-body{flex:1;padding:2.5rem 1.5rem 4rem;max-width:920px;width:100%;margin:0 auto;}
+.section-titre{text-align:center;margin-bottom:2.5rem;}
+.surtitre{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--or);font-weight:500;margin-bottom:.6rem;}
+.section-titre h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:600;color:var(--bleu);line-height:1.2;}
+.section-titre p{margin-top:.8rem;font-size:.92rem;color:var(--gris-f);font-weight:300;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.diviseur{width:44px;height:2px;background:var(--or);margin:1rem auto 0;border-radius:1px;}
+.page-footer{text-align:center;margin-top:2.5rem;}
+
+/* ── PAGE 1 HERO ── */
+#p1{background:var(--bleu);}
+.hero-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem 5rem;position:relative;overflow:hidden;}
+.hero-body::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(201,165,90,.09) 0%,transparent 70%);pointer-events:none;}
+.hero-balance{font-size:clamp(4.5rem,18vw,8rem);animation:float 4s ease-in-out infinite;margin-bottom:1.2rem;filter:drop-shadow(0 8px 32px rgba(201,165,90,.3));line-height:1;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-14px) rotate(1deg);}}
+.hero-titre{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,7vw,3.6rem);font-weight:600;color:var(--blanc);letter-spacing:.02em;margin-bottom:.4rem;line-height:1.15;}
+.hero-titre span{color:var(--or);}
+.hero-slogan{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,3vw,1.25rem);font-weight:300;font-style:italic;color:var(--or-pale);letter-spacing:.06em;margin-bottom:1.25rem;}
+.hero-desc{max-width:500px;font-size:.95rem;font-weight:300;color:rgba(248,246,242,.78);line-height:1.8;margin-bottom:2.5rem;}
+.scroll-hint{position:absolute;bottom:1.8rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;color:rgba(201,165,90,.45);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;animation:pulse 2.5s ease-in-out infinite;}
+.scroll-hint::after{content:'';width:1px;height:32px;background:linear-gradient(to bottom,rgba(201,165,90,.45),transparent);}
+@keyframes pulse{0%,100%{opacity:.4;}50%{opacity:1;}}
+
+/* ── PAGE 2 STEPS ── */
+#p2{background:var(--blanc);}
+.steps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+.step-card{background:var(--blanc-pur);border:1px solid var(--gris);border-top:3px solid var(--or);padding:1.75rem 1.25rem;border-radius:2px;transition:transform .25s,box-shadow .25s;position:relative;}
+.step-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px var(--ombre);}
+.step-num{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:rgba(201,165,90,.16);line-height:1;position:absolute;top:1rem;right:1.25rem;}
+.step-icon{font-size:1.6rem;margin-bottom:.8rem;}
+.step-card h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--bleu);margin-bottom:.5rem;}
+.step-card p{font-size:.83rem;color:var(--gris-f);line-height:1.65;font-weight:300;}
+
+/* ── PAGE 3 FORM ── */
+#p3{background:var(--bleu);}
+#p3 .page-body{max-width:680px;}
+#p3 .section-titre h2{color:var(--blanc);}
+#p3 .section-titre p{color:rgba(248,246,242,.6);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.1rem;}
+.form-group{display:flex;flex-direction:column;gap:.35rem;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(248,246,242,.6);}
+input,textarea{background:rgba(248,246,242,.06);border:1px solid rgba(201,165,90,.22);border-radius:2px;padding:.7rem .9rem;font-family:'Jost',sans-serif;font-size:.92rem;font-weight:300;color:var(--blanc);transition:border-color .2s,background .2s;outline:none;-webkit-appearance:none;}
+input::placeholder,textarea::placeholder{color:rgba(248,246,242,.28);}
+input:focus,textarea:focus{border-color:var(--or);background:rgba(201,165,90,.07);}
+textarea{resize:vertical;min-height:110px;}
+.analyse-box{display:none;margin-top:1.5rem;background:rgba(201,165,90,.08);border:1px solid rgba(201,165,90,.3);padding:1rem 1.25rem;border-radius:2px;}
+.dots{display:flex;gap:5px;margin-bottom:.6rem;}
+.dots span{width:7px;height:7px;background:var(--or);border-radius:50%;animation:dotpulse 1.2s ease-in-out infinite;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes dotpulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+.analyse-txt{font-size:.85rem;color:rgba(248,246,242,.7);font-weight:300;}
+
+/* ── PAGE 4 AVOCATS ── */
+#p4{background:#f0ede6;}
+#p4 nav{background:rgba(30,53,87,.99);}
+.orientation-banner{background:var(--bleu);border-left:3px solid var(--or);padding:1rem 1.25rem;border-radius:0 2px 2px 0;margin-bottom:2rem;}
+.orientation-banner .lbl{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,246,242,.45);margin-bottom:.3rem;}
+.orientation-banner .dom-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--or);}
+.orientation-banner .sub{font-size:.8rem;color:rgba(248,246,242,.6);font-weight:300;margin-top:.2rem;}
+.avocats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;}
+.avocat-card{background:var(--blanc-pur);border:1px solid var(--gris);border-radius:2px;overflow:hidden;transition:transform .22s,box-shadow .22s;cursor:pointer;}
+.avocat-card:hover{transform:translateY(-3px);box-shadow:0 10px 36px var(--ombre);}
+.avocat-head{background:var(--bleu);padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:.9rem;position:relative;}
+.avocat-avatar{width:50px;height:50px;border-radius:50%;border:2px solid var(--or);background:var(--bleu-pale);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--or);flex-shrink:0;}
+.avocat-info h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--blanc);}
+.avocat-info .spe{font-size:.73rem;color:var(--or);font-weight:400;letter-spacing:.03em;margin-top:.15rem;}
+.dispo-badge{position:absolute;top:.9rem;right:.9rem;font-size:.6rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .55rem;border-radius:1px;}
+.dispo-badge.ok{background:rgba(74,193,120,.18);color:#6de09a;border:1px solid rgba(74,193,120,.3);}
+.dispo-badge.rdv{background:rgba(201,165,90,.18);color:var(--or);border:1px solid rgba(201,165,90,.3);}
+.avocat-body{padding:1.1rem 1.25rem;}
+.adet{display:flex;align-items:center;gap:.45rem;font-size:.8rem;color:var(--gris-f);margin-bottom:.35rem;}
+.btn-cal{display:flex;align-items:center;justify-content:center;gap:.45rem;margin-top:1rem;background:var(--bleu);border:none;color:var(--or);font-family:'Jost',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.7rem 1rem;border-radius:2px;cursor:pointer;transition:background .2s;width:100%;}
+.btn-cal:hover{background:var(--bleu-pale);}
+
+/* ── MODAL CALENDRIER ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,35,60,.72);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--blanc-pur);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-radius:12px 12px 0 0;padding:0 0 2rem;}
+@media(min-height:700px){.modal{border-radius:12px;margin:auto;}}
+.modal-header{background:var(--bleu);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0;position:sticky;top:0;z-index:5;}
+.modal-header h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--blanc);}
+.modal-header .spe-m{font-size:.75rem;color:var(--or);margin-top:.15rem;}
+.btn-close{background:transparent;border:1px solid rgba(201,165,90,.3);color:rgba(248,246,242,.7);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.btn-close:hover{border-color:var(--or);color:var(--or);}
+
+/* Calendrier */
+.cal-wrap{padding:1.25rem 1.5rem 0;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.cal-mois{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--bleu);}
+.cal-btn{background:transparent;border:1px solid var(--gris);color:var(--gris-f);width:30px;height:30px;border-radius:2px;cursor:pointer;font-size:.9rem;transition:all .2s;}
+.cal-btn:hover{border-color:var(--or);color:var(--or);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{text-align:center;font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gris-f);padding:.3rem 0;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:.82rem;cursor:default;position:relative;}
+.cal-day.vide{opacity:0;}
+.cal-day.passe{color:#ccc;text-decoration:line-through;font-size:.75rem;}
+.cal-day.dispo{background:rgba(74,193,120,.12);color:#2a7a4a;font-weight:600;cursor:pointer;border:1px solid rgba(74,193,120,.25);transition:all .15s;}
+.cal-day.dispo:hover{background:rgba(74,193,120,.25);transform:scale(1.08);}
+.cal-day.indispo{background:rgba(224,82,82,.07);color:#bbb;font-size:.75rem;border:1px solid rgba(224,82,82,.12);}
+.cal-day.selected{background:var(--or) !important;color:var(--bleu) !important;font-weight:700;border-color:var(--or) !important;transform:scale(1.1);}
+.cal-day.today{outline:2px solid var(--or);outline-offset:1px;}
+
+.cal-legende{display:flex;gap:1rem;margin:.9rem 0;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--gris-f);}
+.leg-dot{width:10px;height:10px;border-radius:2px;}
+.leg-dot.v{background:rgba(74,193,120,.25);border:1px solid rgba(74,193,120,.4);}
+.leg-dot.r{background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.2);}
+.leg-dot.o{background:var(--or);}
+
+/* Créneaux */
+.creneaux-titre{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bleu);margin:1.2rem 0 .7rem;}
+.creneaux-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;}
+.creneau{background:rgba(30,53,87,.06);border:1px solid rgba(30,53,87,.12);padding:.5rem;border-radius:4px;text-align:center;font-size:.8rem;font-weight:500;color:var(--bleu);cursor:pointer;transition:all .15s;}
+.creneau:hover{background:rgba(201,165,90,.15);border-color:var(--or);}
+.creneau.sel{background:var(--bleu);color:var(--or);border-color:var(--bleu);}
+
+/* Formulaire RDV */
+.rdv-form{margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--gris);}
+.rdv-form h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--bleu);margin-bottom:.9rem;}
+.rdv-recap{background:rgba(201,165,90,.1);border:1px solid rgba(201,165,90,.25);border-radius:4px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.83rem;color:var(--bleu);line-height:1.7;}
+.rdv-recap strong{color:var(--or);}
+.rdv-field{margin-bottom:.8rem;}
+.rdv-field label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gris-f);margin-bottom:.3rem;}
+.rdv-field input,.rdv-field textarea{background:#f8f6f2;border:1px solid var(--gris);border-radius:4px;padding:.6rem .8rem;font-family:'Jost',sans-serif;font-size:.88rem;color:var(--bleu);width:100%;outline:none;transition:border-color .2s;}
+.rdv-field input:focus,.rdv-field textarea:focus{border-color:var(--or);}
+.rdv-field textarea{min-height:80px;resize:vertical;}
+.btn-rdv{width:100%;background:var(--or);color:var(--bleu);border:none;padding:.85rem;border-radius:4px;font-family:'Jost',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;margin-top:.5rem;}
+.btn-rdv:hover{background:var(--or-clair);transform:translateY(-1px);}
+.btn-rdv:disabled{background:var(--gris);color:var(--gris-f);cursor:not-allowed;transform:none;}
+
+/* Confirmation */
+.rdv-confirm{display:none;text-align:center;padding:2rem 1.5rem;}
+.rdv-confirm .check{font-size:3rem;margin-bottom:1rem;}
+.rdv-confirm h4{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--bleu);margin-bottom:.75rem;}
+.rdv-confirm p{font-size:.88rem;color:var(--gris-f);line-height:1.7;font-weight:300;}
+
+/* ── PAGE 5 FINALE ── */
+#p5{background:var(--bleu);}
+.finale-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem 4rem;position:relative;overflow:hidden;}
+.finale-body::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,165,90,.07) 0%,transparent 70%);pointer-events:none;}
+.finale-balance{font-size:clamp(3.5rem,14vw,6rem);animation:float 5s ease-in-out infinite;margin-bottom:1.25rem;}
+.ornement{display:flex;align-items:center;gap:1rem;max-width:260px;margin:0 auto 1.75rem;color:rgba(201,165,90,.4);}
+.ornement::before,.ornement::after{content:'';flex:1;height:1px;background:rgba(201,165,90,.3);}
+.finale-texte{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,2.5vw,1.2rem);font-weight:300;color:rgba(248,246,242,.78);max-width:520px;margin:0 auto 1.75rem;line-height:1.75;}
+.finale-citation{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,4vw,1.75rem);font-style:italic;font-weight:300;color:var(--or);max-width:520px;margin:0 auto 2.5rem;}
+.finale-citation::before{content:'« ';}
+.finale-citation::after{content:' »';}
+.finale-sig{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,246,242,.38);font-weight:300;border-top:1px solid rgba(201,165,90,.18);padding-top:1.5rem;max-width:400px;margin:0 auto;line-height:1.8;}
+.finale-sig strong{color:var(--or);font-weight:500;}
+
+/* ── NOTIF ── */
+.notif{display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bleu);border:1px solid var(--or);color:var(--blanc);padding:.9rem 1.5rem;border-radius:2px;font-size:.85rem;font-weight:300;box-shadow:0 8px 32px rgba(30,53,87,.5);z-index:999;animation:slideUp .3s ease;white-space:nowrap;max-width:90vw;text-align:center;}
+.notif.show{display:block;}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(10px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .form-grid{grid-template-columns:1fr;}
+  .avocats-grid{grid-template-columns:1fr;}
+  .creneaux-grid{grid-template-columns:repeat(2,1fr);}
+  .btn-or{width:100%;justify-content:center;}
+  .cal-day{font-size:.72rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PAGE 1 : ACCUEIL ══ -->
+<div class="page active" id="p1">
+  <nav>
+    <div class="nav-logo">⚖️ Avoca<span>Connect</span></div>
+    <div class="nav-etape">Accueil</div>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+  <div class="hero-body">
+    <div class="hero-balance">⚖️</div>
+    <h1 class="hero-titre">AvocaConnect <span>Martinique</span></h1>
+    <p class="hero-slogan">Le bon avocat, pour le bon besoin.</p>
+    <p class="hero-desc">Décrivez votre situation et trouvez l'avocat le plus adapté à votre besoin. Simple, confidentiel, efficace.</p>
+    <button class="btn-or" onclick="aller(1,2)">👉 Commencer</button>
+    <div class="scroll-hint">Découvrir</div>
+  </div>
+</div>
+
+<!-- ══ PAGE 2 : FONCTIONNEMENT ══ -->
+<div class="page" id="p2">
+  <nav>
+    <button class="btn-retour" onclick="aller(2,1)">← Retour</button>
+    <div class="nav-etape">Comment ça fonctionne</div>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+  <div class="page-body">
+    <div class="section-titre">
+      <div class="surtitre">Le processus</div>
+      <h2>Quatre étapes vers<br>le bon avocat</h2>
+      <div class="diviseur"></div>
+      <p>Un parcours simple et guidé pour vous orienter vers le professionnel du droit le plus adapté à votre situation.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><div class="step-icon">📝</div><h3>Décrivez votre situation</h3><p>Exprimez votre problème librement avec vos propres mots. Aucun jargon juridique requis.</p></div>
+      <div class="step-card"><div class="step-num">02</div><div class="step-icon">🔍</div><h3>Analyse intelligente</h3><p>L'application identifie les mots-clés, le contexte et détermine automatiquement le domaine du droit concerné.</p></div>
+      <div class="step-card"><div class="step-num">03</div><div class="step-icon">⚖️</div><h3>Orientation juridique</h3><p>Vous êtes orienté vers le domaine précis : droit pénal, famille, travail, victimes, immobilier…</p></div>
+      <div class="step-card"><div class="step-num">04</div><div class="step-icon">👨‍⚖️</div><h3>Trouvez votre avocat</h3><p>Des profils d'avocats spécialisés en Martinique vous sont présentés avec leur calendrier de disponibilités.</p></div>
+    </div>
+    <div class="page-footer"><button class="btn-or" onclick="aller(2,3)">📝 Décrire ma situation</button></div>
+  </div>
+</div>
+
+<!-- ══ PAGE 3 : FORMULAIRE ══ -->
+<div class="page" id="p3">
+  <nav>
+    <button class="btn-retour" onclick="aller(3,2)">← Retour</button>
+    <div class="nav-etape">Votre situation</div>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+  <div class="page-body">
+    <div class="section-titre">
+      <div class="surtitre">Votre demande</div>
+      <h2>Décrivez votre situation</h2>
+      <div class="diviseur"></div>
+      <p>Remplissez ce formulaire pour être orienté vers l'avocat le plus adapté à votre besoin.</p>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="family-name"></div>
+      <div class="form-group"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="given-name"></div>
+      <div class="form-group"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="+596 696 XX XX XX" autocomplete="tel"></div>
+      <div class="form-group"><label>Adresse e-mail</label><input type="email" id="f-email" placeholder="votre@email.com" autocomplete="email"></div>
+      <div class="form-group full"><label>Décrivez votre problème</label><textarea id="f-message" placeholder="Ex : Je suis victime de harcèlement au travail depuis plusieurs mois…&#10;&#10;Plus vous êtes précis(e), meilleure sera l'orientation."></textarea></div>
+    </div>
+    <button class="btn-or" style="width:100%;justify-content:center;" onclick="analyserDemande()">📨 Analyser ma situation</button>
+    <div class="analyse-box" id="analyse-box">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="analyse-txt" id="analyse-txt">Analyse en cours…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 4 : AVOCATS ══ -->
+<div class="page" id="p4">
+  <nav>
+    <button class="btn-retour" onclick="aller(4,3)">← Retour</button>
+    <div class="nav-etape">Avocats recommandés</div>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+  <div class="page-body">
+    <div class="orientation-banner">
+      <div class="lbl">Domaine identifié</div>
+      <div class="dom-name" id="domain-name">–</div>
+      <div class="sub">Cliquez sur un avocat pour voir ses disponibilités et prendre rendez-vous</div>
+    </div>
+    <div class="avocats-grid" id="avocats-grid"></div>
+    <div class="page-footer" style="margin-top:2rem;">
+      <button class="btn-or" onclick="aller(4,5)">Terminer ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 5 : FINALE ══ -->
+<div class="page" id="p5">
+  <nav style="justify-content:center;">
+    <div class="nav-logo">⚖️ Avoca<span>Connect</span></div>
+  </nav>
+  <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  <div class="finale-body">
+    <div class="finale-balance">⚖️</div>
+    <div class="ornement"><span>✦</span></div>
+    <p class="finale-texte">Cette application est une idée imaginée par Farel Rotsen dans le cadre de son oral du Diplôme National du Brevet.</p>
+    <blockquote class="finale-citation">La justice doit être accessible à tous.</blockquote>
+    <div class="finale-sig">Projet réalisé par <strong>Farel Rotsen</strong><br>Collège Rose Saint-Just · Martinique</div>
+  </div>
+</div>
+
+<!-- ══ MODAL CALENDRIER ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modal-nom">Maître –</h3>
+        <div class="spe-m" id="modal-spe">–</div>
+      </div>
+      <button class="btn-close" onclick="fermerModalBtn()">✕</button>
+    </div>
+    <div id="modal-contenu">
+      <div class="cal-wrap">
+        <div class="cal-nav">
+          <button class="cal-btn" onclick="changerMois(-1)">‹</button>
+          <div class="cal-mois" id="cal-mois-label"></div>
+          <button class="cal-btn" onclick="changerMois(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legende">
+          <div class="leg-item"><div class="leg-dot v"></div>Disponible</div>
+          <div class="leg-item"><div class="leg-dot r"></div>Indisponible</div>
+          <div class="leg-item"><div class="leg-dot o"></div>Sélectionné</div>
+        </div>
+        <div id="creneaux-section" style="display:none">
+          <div class="creneaux-titre">Créneaux disponibles — <span id="cren-date-label"></span></div>
+          <div class="creneaux-grid" id="creneaux-grid"></div>
+        </div>
+        <div id="rdv-form-wrap" style="display:none" class="rdv-form">
+          <h4>📋 Confirmer le rendez-vous</h4>
+          <div class="rdv-recap" id="rdv-recap"></div>
+          <div class="rdv-field"><label>Nom complet</label><input type="text" id="rdv-nom" placeholder="Votre nom et prénom"></div>
+          <div class="rdv-field"><label>Téléphone</label><input type="tel" id="rdv-tel" placeholder="+596 696 XX XX XX"></div>
+          <div class="rdv-field"><label>E-mail</label><input type="email" id="rdv-email" placeholder="votre@email.com"></div>
+          <div class="rdv-field"><label>Objet du rendez-vous</label><textarea id="rdv-objet" placeholder="Résumez brièvement votre situation…"></textarea></div>
+          <button class="btn-rdv" id="btn-rdv-envoyer" onclick="confirmerRDV()">✓ Confirmer le rendez-vous</button>
+        </div>
+      </div>
+      <div class="rdv-confirm" id="rdv-confirm">
+        <div class="check">✅</div>
+        <h4>Rendez-vous confirmé !</h4>
+        <p id="rdv-confirm-txt"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ── BASE DE DONNÉES : 3 avocats minimum par catégorie ──
+const avocats = [
+  // PÉNAL
+  {id:1,i:'JD',nom:'Maître Jean Dupont',spe:'Droit pénal',dom:'pénal',ville:'Fort-de-France',exp:'18 ans',tel:'+596 696 12 34 56'},
+  {id:2,i:'NB',nom:'Maître Nathalie Bellamy',spe:'Droit pénal',dom:'pénal',ville:'Sainte-Marie',exp:'8 ans',tel:'+596 696 54 09 27'},
+  {id:3,i:'RC',nom:'Maître Roland Césaire',spe:'Droit pénal',dom:'pénal',ville:'Le Marin',exp:'15 ans',tel:'+596 596 74 88 01'},
+  // FAMILLE
+  {id:4,i:'SM',nom:'Maître Sophie Martin',spe:'Droit de la famille',dom:'famille',ville:'Le Lamentin',exp:'12 ans',tel:'+596 596 63 21 00'},
+  {id:5,i:'EV',nom:'Maître Étienne Valois',spe:'Droit de la famille',dom:'famille',ville:'Fort-de-France',exp:'20 ans',tel:'+596 596 71 33 66'},
+  {id:6,i:'LA',nom:'Maître Laura Amédée',spe:'Droit de la famille',dom:'famille',ville:'Schoelcher',exp:'6 ans',tel:'+596 696 30 45 72'},
+  // TRAVAIL
+  {id:7,i:'PL',nom:'Maître Pierre Laurent',spe:'Droit du travail',dom:'travail',ville:'Fort-de-France',exp:'9 ans',tel:'+596 696 45 78 90'},
+  {id:8,i:'KM',nom:'Maître Karine Manville',spe:'Droit du travail',dom:'travail',ville:'Le Lamentin',exp:'13 ans',tel:'+596 596 68 22 55'},
+  {id:9,i:'FP',nom:'Maître Franck Pelage',spe:'Droit du travail',dom:'travail',ville:'Rivière-Pilote',exp:'10 ans',tel:'+596 696 87 60 14'},
+  // VICTIMES
+  {id:10,i:'MR',nom:'Maître Marie Robert',spe:'Droit des victimes',dom:'victimes',ville:'Le Robert',exp:'14 ans',tel:'+596 596 74 55 10'},
+  {id:11,i:'GN',nom:'Maître Gaël Nabet',spe:'Droit des victimes',dom:'victimes',ville:'Fort-de-France',exp:'11 ans',tel:'+596 696 23 88 47'},
+  {id:12,i:'IS',nom:'Maître Isabelle Sainte-Rose',spe:'Droit des victimes',dom:'victimes',ville:'Le François',exp:'7 ans',tel:'+596 696 52 17 39'},
+  // IMMOBILIER
+  {id:13,i:'AB',nom:'Maître Alain Bernard',spe:'Droit immobilier',dom:'immobilier',ville:'Schoelcher',exp:'21 ans',tel:'+596 696 23 67 41'},
+  {id:14,i:'DL',nom:'Maître Dominique Lerat',spe:'Droit immobilier',dom:'immobilier',ville:'Fort-de-France',exp:'17 ans',tel:'+596 596 60 99 11'},
+  {id:15,i:'YC',nom:'Maître Yvette Clarice',spe:'Droit immobilier',dom:'immobilier',ville:'Trinité',exp:'9 ans',tel:'+596 696 41 28 63'},
+  // ADMINISTRATIF
+  {id:16,i:'CD',nom:'Maître Claire Dubois',spe:'Droit administratif',dom:'administratif',ville:'Fort-de-France',exp:'11 ans',tel:'+596 596 60 48 82'},
+  {id:17,i:'BT',nom:'Maître Bernard Taly',spe:'Droit administratif',dom:'administratif',ville:'Le Lamentin',exp:'16 ans',tel:'+596 596 51 77 34'},
+  {id:18,i:'AM',nom:'Maître Annick Montrose',spe:'Droit administratif',dom:'administratif',ville:'Saint-Pierre',exp:'8 ans',tel:'+596 696 62 35 90'},
+  // AFFAIRES
+  {id:19,i:'TF',nom:'Maître Thomas Fontaine',spe:'Droit des affaires',dom:'affaires',ville:'Le Lamentin',exp:'16 ans',tel:'+596 696 87 32 15'},
+  {id:20,i:'OG',nom:'Maître Olivier Germain',spe:'Droit des affaires',dom:'affaires',ville:'Fort-de-France',exp:'22 ans',tel:'+596 596 70 14 28'},
+  {id:21,i:'PR',nom:'Maître Pascale Renard',spe:'Droit des affaires',dom:'affaires',ville:'Trois-Îlets',exp:'12 ans',tel:'+596 696 44 06 57'},
+];
+
+const keywords={
+  pénal:['harcèlement','agression','violence','vol','escroquerie','arnaque','fraude','menace','coups','blessures','abus','pénal','criminel','plainte','voie de fait','meurtre','cambriolage'],
+  famille:['divorce','garde','enfant','pension','mariage','séparation','héritage','succession','adoption','famille','époux','conjoint','tutelle','autorité parentale','pension alimentaire'],
+  travail:['licenciement','employeur','travail','chômage','salaire','contrat','grève','discrimination','syndicat','cdi','cdd','poste','rupture conventionnelle','heures sup','mobbing'],
+  victimes:['victime','accident','préjudice','indemnisation','assurance','dommage','responsabilité','blessé','traumatisme','réparation','sinistre'],
+  immobilier:['logement','bail','loyer','propriétaire','locataire','vente','achat','maison','appartement','terrain','foncier','notaire','copropriété','construction','promoteur'],
+  administratif:['administration','mairie','préfecture','permis','fonctionnaire','retraite','allocation','caf','impôt','expulsion','titre de séjour','visa','recours'],
+  affaires:['entreprise','société','contrat commercial','associé','créancier','dette','faillite','investissement','affaires','liquidation','sarl','sas','fusion','actionnaire'],
+};
+const labels={pénal:'Droit pénal',famille:'Droit de la famille',travail:'Droit du travail',victimes:'Droit des victimes',immobilier:'Droit immobilier',administratif:'Droit administratif',affaires:'Droit des affaires'};
+
+// ── Navigation ──
+function aller(de,vers){
+  const o=document.getElementById('p'+de),d=document.getElementById('p'+vers);
+  o.classList.add('exit-left');
+  setTimeout(()=>{o.classList.remove('active','exit-left');d.classList.add('active');d.scrollTop=0;},370);
+}
+
+// ── Analyse ──
+function analyserDemande(){
+  const msg=document.getElementById('f-message').value.toLowerCase();
+  if(!msg.trim()){notif('⚠️ Veuillez décrire votre situation.');return;}
+  const boite=document.getElementById('analyse-box'),txt=document.getElementById('analyse-txt');
+  boite.style.display='block';
+  const etapes=['Lecture de votre situation…','Identification des mots-clés…','Détermination du domaine juridique…','Sélection des avocats partenaires…'];
+  let i=0; txt.textContent=etapes[0];
+  const iv=setInterval(()=>{i++;if(i<etapes.length)txt.textContent=etapes[i];else clearInterval(iv);},650);
+  setTimeout(()=>{
+    boite.style.display='none';
+    let best='travail',bestScore=0;
+    for(const[dom,mots]of Object.entries(keywords)){const s=mots.filter(m=>msg.includes(m)).length;if(s>bestScore){bestScore=s;best=dom;}}
+    afficherAvocats(best);aller(3,4);
+  },2900);
+}
+
+// ── Afficher avocats ──
+function afficherAvocats(dom){
+  document.getElementById('domain-name').textContent=labels[dom];
+  const liste=avocats.filter(a=>a.dom===dom);
+  // Alterner dispo simulée
+  document.getElementById('avocats-grid').innerHTML=liste.map((a,idx)=>{
+    const dispoTexte=idx%3===1?'Sur rendez-vous':'Disponible';
+    const dispoCls=dispoTexte==='Disponible'?'ok':'rdv';
+    return`<div class="avocat-card" onclick="ouvrirCalendrier(${a.id})">
+      <div class="avocat-head">
+        <div class="avocat-avatar">${a.i}</div>
+        <div class="avocat-info"><h3>${a.nom}</h3><div class="spe">${a.spe}</div></div>
+        <div class="dispo-badge ${dispoCls}">${dispoTexte}</div>
+      </div>
+      <div class="avocat-body">
+        <div class="adet">📍 ${a.ville}, Martinique</div>
+        <div class="adet">⏳ ${a.exp} d'expérience</div>
+        <div class="adet">📞 ${a.tel}</div>
+        <button class="btn-cal">📅 Voir les disponibilités</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Calendrier ──
+let calState={avocat:null,annee:0,mois:0,jourSel:null,creneauSel:null,dispos:{}};
+
+function genDispos(avId,annee,mois){
+  // Génération pseudo-aléatoire déterministe par avocat+mois
+  const seed=avId*1000+annee*12+mois;
+  const rng=s=>{let x=Math.sin(s)*10000;return x-Math.floor(x);};
+  const jours={};
+  const nbJours=new Date(annee,mois+1,0).getDate();
+  for(let j=1;j<=nbJours;j++){
+    const dow=new Date(annee,mois,j).getDay();
+    if(dow===0||dow===6){jours[j]='indispo';continue;}
+    const r=rng(seed+j);
+    if(r<0.35)jours[j]='indispo';
+    else jours[j]='dispo';
+  }
+  return jours;
+}
+
+function creneauxPour(avId,annee,mois,jour){
+  const seed=avId*10000+annee*365+mois*31+jour;
+  const rng=s=>{let x=Math.sin(s)*10000;return x-Math.floor(x);};
+  const slots=['09h00','09h30','10h00','10h30','11h00','14h00','14h30','15h00','15h30','16h00','16h30'];
+  return slots.filter((_,i)=>rng(seed+i)>0.45);
+}
+
+function ouvrirCalendrier(avId){
+  const av=avocats.find(a=>a.id===avId);
+  if(!av)return;
+  const now=new Date();
+  calState={avocat:av,annee:now.getFullYear(),mois:now.getMonth(),jourSel:null,creneauSel:null,dispos:{}};
+  document.getElementById('modal-nom').textContent=av.nom;
+  document.getElementById('modal-spe').textContent=av.spe+' · '+av.ville;
+  document.getElementById('creneaux-section').style.display='none';
+  document.getElementById('rdv-form-wrap').style.display='none';
+  document.getElementById('rdv-confirm').style.display='none';
+  document.getElementById('modal-contenu').querySelector('.cal-wrap').style.display='block';
+  // Pré-remplir nom depuis formulaire
+  const nom=(document.getElementById('f-prenom').value+' '+document.getElementById('f-nom').value).trim();
+  const tel=document.getElementById('f-tel').value;
+  const email=document.getElementById('f-email').value;
+  if(nom)document.getElementById('rdv-nom').value=nom;
+  if(tel)document.getElementById('rdv-tel').value=tel;
+  if(email)document.getElementById('rdv-email').value=email;
+  renderCal();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function renderCal(){
+  const{avocat,annee,mois,jourSel}=calState;
+  const now=new Date();
+  const moisNoms=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('cal-mois-label').textContent=moisNoms[mois]+' '+annee;
+  calState.dispos=genDispos(avocat.id,annee,mois);
+  const premier=new Date(annee,mois,1).getDay();
+  const decalage=(premier===0?6:premier-1);
+  const nbJours=new Date(annee,mois+1,0).getDate();
+  const jours=['L','M','M','J','V','S','D'];
+  let html=jours.map(j=>`<div class="cal-dow">${j}</div>`).join('');
+  for(let v=0;v<decalage;v++)html+=`<div class="cal-day vide"></div>`;
+  for(let j=1;j<=nbJours;j++){
+    const date=new Date(annee,mois,j);
+    const isPasse=date<new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const isToday=j===now.getDate()&&mois===now.getMonth()&&annee===now.getFullYear();
+    const stat=calState.dispos[j]||'indispo';
+    if(isPasse){html+=`<div class="cal-day passe">${j}</div>`;}
+    else if(stat==='dispo'){
+      const sel=jourSel===j?' selected':'';
+      const tod=isToday?' today':'';
+      html+=`<div class="cal-day dispo${sel}${tod}" onclick="selJour(${j})">${j}</div>`;
+    }else{
+      const tod=isToday?' today':'';
+      html+=`<div class="cal-day indispo${tod}" title="Indisponible">${j}</div>`;
+    }
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+}
+
+function changerMois(delta){
+  calState.mois+=delta;
+  if(calState.mois>11){calState.mois=0;calState.annee++;}
+  if(calState.mois<0){calState.mois=11;calState.annee--;}
+  calState.jourSel=null;calState.creneauSel=null;
+  document.getElementById('creneaux-section').style.display='none';
+  document.getElementById('rdv-form-wrap').style.display='none';
+  renderCal();
+}
+
+function selJour(j){
+  calState.jourSel=j;calState.creneauSel=null;
+  renderCal();
+  const{avocat,annee,mois}=calState;
+  const slots=creneauxPour(avocat.id,annee,mois,j);
+  const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.getElementById('cren-date-label').textContent=`${j} ${moisNoms[mois]} ${annee}`;
+  document.getElementById('creneaux-grid').innerHTML=slots.map(s=>`<div class="creneau" onclick="selCreneau(this,'${s}')">${s}</div>`).join('')||'<p style="font-size:.82rem;color:var(--gris-f)">Aucun créneau ce jour.</p>';
+  document.getElementById('creneaux-section').style.display='block';
+  document.getElementById('rdv-form-wrap').style.display='none';
+  document.querySelector('.modal').scrollTop=document.getElementById('creneaux-section').offsetTop;
+}
+
+function selCreneau(el,heure){
+  document.querySelectorAll('.creneau').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  calState.creneauSel=heure;
+  const{avocat,annee,mois,jourSel}=calState;
+  const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.getElementById('rdv-recap').innerHTML=
+    `<strong>Avocat :</strong> ${avocat.nom}<br>
+     <strong>Spécialité :</strong> ${avocat.spe}<br>
+     <strong>Date :</strong> ${jourSel} ${moisNoms[mois]} ${annee} à <strong>${heure}</strong><br>
+     <strong>Cabinet :</strong> ${avocat.ville}, Martinique`;
+  document.getElementById('rdv-form-wrap').style.display='block';
+  setTimeout(()=>{document.getElementById('rdv-form-wrap').scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+
+function confirmerRDV(){
+  const nom=document.getElementById('rdv-nom').value.trim();
+  const tel=document.getElementById('rdv-tel').value.trim();
+  if(!nom||!tel){notif('⚠️ Veuillez renseigner votre nom et téléphone.');return;}
+  const{avocat,annee,mois,jourSel,creneauSel}=calState;
+  const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.querySelector('.cal-wrap').style.display='none';
+  const conf=document.getElementById('rdv-confirm');
+  conf.style.display='block';
+  document.getElementById('rdv-confirm-txt').innerHTML=
+    `Votre rendez-vous avec <strong>${avocat.nom}</strong> est confirmé pour le<br>
+     <strong>${jourSel} ${moisNoms[mois]} ${annee} à ${creneauSel}</strong>.<br><br>
+     Une confirmation sera envoyée au <strong>${tel}</strong>.<br>
+     <span style="font-size:.8rem;color:var(--gris-f);margin-top:.5rem;display:block">Cabinet de ${avocat.ville}, Martinique</span>`;
+  document.querySelector('.modal').scrollTop=0;
+}
+
+function fermerModal(e){if(e.target===document.getElementById('modal-overlay'))fermerModalBtn();}
+function fermerModalBtn(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  calState.jourSel=null;calState.creneauSel=null;
+}
+
+function notif(msg){
+  const el=document.getElementById('notif');el.innerHTML=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),4000);
+}
+</script>
+</body>
+</html>
