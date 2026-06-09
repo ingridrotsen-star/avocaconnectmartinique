@@ -1,8 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="AvocaConnect Martinique - Trouvez le bon avocat pour votre situation juridique en Martinique.">
+<meta name="theme-color" content="#1E3557">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <title>AvocaConnect Martinique</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -193,6 +198,8 @@ textarea{resize:vertical;min-height:110px;}
 .notif.show{display:block;}
 @keyframes slideUp{from{transform:translateX(-50%) translateY(10px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
 
+
+
 /* ── RESPONSIVE ── */
 @media(max-width:520px){
   .form-grid{grid-template-columns:1fr;}
@@ -200,6 +207,8 @@ textarea{resize:vertical;min-height:110px;}
   .creneaux-grid{grid-template-columns:repeat(2,1fr);}
   .btn-or{width:100%;justify-content:center;}
   .cal-day{font-size:.72rem;}
+  .btn-music{bottom:1rem;right:1rem;width:40px;height:40px;}
+  .music-tip{display:none;}
 }
 </style>
 </head>
@@ -358,6 +367,9 @@ textarea{resize:vertical;min-height:110px;}
 
 <div class="notif" id="notif"></div>
 
+<!-- ══ MUSIQUE WEB AUDIO ══ -->
+
+
 <script>
 // ── BASE DE DONNÉES : 3 avocats minimum par catégorie ──
 const avocats = [
@@ -404,6 +416,11 @@ const labels={pénal:'Droit pénal',famille:'Droit de la famille',travail:'Droit
 
 // ── Navigation ──
 function aller(de,vers){
+  // Re-enable submit button if navigating away from p3
+  if(de===3){
+    const b=document.querySelector('#p3 .btn-or');
+    if(b){b.disabled=false;b.style.opacity='';}
+  }
   const o=document.getElementById('p'+de),d=document.getElementById('p'+vers);
   o.classList.add('exit-left');
   setTimeout(()=>{o.classList.remove('active','exit-left');d.classList.add('active');d.scrollTop=0;},370);
@@ -411,6 +428,9 @@ function aller(de,vers){
 
 // ── Analyse ──
 function analyserDemande(){
+  const btnEnvoyer = document.querySelector('#p3 .btn-or');
+  if(btnEnvoyer && btnEnvoyer.disabled) return;
+  if(btnEnvoyer) { btnEnvoyer.disabled=true; btnEnvoyer.style.opacity='0.6'; }
   const msg=document.getElementById('f-message').value.toLowerCase();
   if(!msg.trim()){notif('⚠️ Veuillez décrire votre situation.');return;}
   const boite=document.getElementById('analyse-box'),txt=document.getElementById('analyse-txt');
@@ -428,7 +448,7 @@ function analyserDemande(){
 
 // ── Afficher avocats ──
 function afficherAvocats(dom){
-  document.getElementById('domain-name').textContent=labels[dom];
+  document.getElementById('domain-name').textContent=labels[dom]||'Droit général';
   const liste=avocats.filter(a=>a.dom===dom);
   // Alterner dispo simulée
   document.getElementById('avocats-grid').innerHTML=liste.map((a,idx)=>{
@@ -529,6 +549,8 @@ function renderCal(){
 }
 
 function changerMois(delta){
+  const now=new Date();
+  if(delta<0 && calState.annee===now.getFullYear() && calState.mois<=now.getMonth()) return;
   calState.mois+=delta;
   if(calState.mois>11){calState.mois=0;calState.annee++;}
   if(calState.mois<0){calState.mois=11;calState.annee--;}
@@ -569,7 +591,10 @@ function selCreneau(el,heure){
 function confirmerRDV(){
   const nom=document.getElementById('rdv-nom').value.trim();
   const tel=document.getElementById('rdv-tel').value.trim();
-  if(!nom||!tel){notif('⚠️ Veuillez renseigner votre nom et téléphone.');return;}
+  const email=document.getElementById('rdv-email').value.trim();
+  if(!nom){notif('⚠️ Veuillez renseigner votre nom complet.');return;}
+  if(!tel||tel.length<8){notif('⚠️ Numéro de téléphone invalide.');return;}
+  if(email && !/^[^@]+@[^@]+\.[^@]+$/.test(email)){notif('⚠️ Adresse e-mail invalide.');return;}
   const{avocat,annee,mois,jourSel,creneauSel}=calState;
   const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
   document.querySelector('.cal-wrap').style.display='none';
@@ -588,6 +613,227 @@ function fermerModalBtn(){
   document.getElementById('modal-overlay').classList.remove('open');
   calState.jourSel=null;calState.creneauSel=null;
 }
+
+// ══════════════════════════════════════════════════
+// BERCEUSE DOUCE — piano ambient de confiance
+// Tonalité Fa Majeur, 58 bpm, très doux
+// ══════════════════════════════════════════════════
+
+let _ctx=null, _playing=false, _masterGain=null, _loopTimer=null;
+
+function getCtx(){
+  if(_ctx) return _ctx;
+  _ctx = new (window.AudioContext||window.webkitAudioContext)();
+
+  // Gain master très doux
+  _masterGain = _ctx.createGain();
+  _masterGain.gain.value = 0;
+
+  // Compresseur doux pour éviter les pics
+  const comp = _ctx.createDynamicsCompressor();
+  comp.threshold.value = -24;
+  comp.knee.value = 30;
+  comp.ratio.value = 4;
+  comp.attack.value = 0.05;
+  comp.release.value = 0.4;
+
+  // Reverb salle intime (longue queue douce)
+  const rev = _ctx.createConvolver();
+  const sr = _ctx.sampleRate;
+  const len = sr * 3.5;
+  const buf = _ctx.createBuffer(2, len, sr);
+  for(let c=0;c<2;c++){
+    const d = buf.getChannelData(c);
+    for(let i=0;i<len;i++){
+      const decay = Math.pow(1 - i/len, 1.8);
+      d[i] = (Math.random()*2-1) * decay * 0.4;
+    }
+  }
+  rev.buffer = buf;
+
+  // EQ low-pass pour adoucir (coupe les aigus durs)
+  const lpf = _ctx.createBiquadFilter();
+  lpf.type = 'lowpass';
+  lpf.frequency.value = 900;
+  lpf.Q.value = 0.5;
+
+  const revGain = _ctx.createGain(); revGain.gain.value = 0.45;
+  const dryGain = _ctx.createGain(); dryGain.gain.value = 0.6;
+
+  _masterGain.connect(lpf);
+  lpf.connect(comp);
+  comp.connect(dryGain); dryGain.connect(_ctx.destination);
+  comp.connect(rev); rev.connect(revGain); revGain.connect(_ctx.destination);
+
+  return _ctx;
+}
+
+// Note piano ultra-douce : enveloppe berceuse (attaque molle, longue queue)
+function note(midi, t, dur, vel=0.4){
+  const ctx = getCtx();
+  const freq = 440 * Math.pow(2,(midi-69)/12);
+
+  // 3 oscillateurs fondamentale + harmoniques douces
+  const oscs = [
+    {type:'sine',   mult:1.000, gain:vel*0.55},
+    {type:'sine',   mult:2.001, gain:vel*0.08},
+    {type:'triangle',mult:3.003,gain:vel*0.03},
+  ];
+
+  oscs.forEach(({type,mult,gain:g})=>{
+    const osc = ctx.createOscillator();
+    const gn  = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq * mult;
+    // Légère variation de pitch (humanisation)
+    osc.frequency.setValueAtTime(freq*mult*(1+0.0008*(Math.random()-0.5)), t);
+
+    // Enveloppe berceuse : attaque douce 30ms, sustain long, queue très douce
+    gn.gain.setValueAtTime(0, t);
+    gn.gain.linearRampToValueAtTime(g, t + 0.03);
+    gn.gain.setValueAtTime(g, t + 0.06);
+    gn.gain.exponentialRampToValueAtTime(g * 0.55, t + dur * 0.35);
+    gn.gain.exponentialRampToValueAtTime(g * 0.18, t + dur * 0.75);
+    gn.gain.exponentialRampToValueAtTime(0.0001,    t + dur * 1.1);
+
+    osc.connect(gn);
+    gn.connect(_masterGain);
+    osc.start(t);
+    osc.stop(t + dur * 1.15 + 0.1);
+  });
+}
+
+// Accord doux (plusieurs notes simultanées = chaleur harmonique)
+function accord(midis, t, dur, vel=0.28){
+  midis.forEach((m,i)=> note(m, t + i*0.04, dur, vel*(1-i*0.08)));
+}
+
+// ── BERCEUSE en Fa Majeur ──
+// Fa=65 Sol=67 La=69 Sib=70 Do=72 Ré=74 Mi=76
+// Basse : F2=41 C2=36 Bb1=34 G1=31
+// Tempo : noire = 1.04s (58 bpm)
+const Q=1.04; // noire
+const H=Q*2;  // blanche
+const W=Q*4;  // ronde
+
+const BERCEUSE = [
+  // == PHRASE 1 : douceur et tendresse ==
+  // Mélodie
+  [65, 0*Q, H+Q,  0.38], // Fa
+  [67, 2*Q, Q,    0.32], // Sol
+  [69, 3*Q, H,    0.40], // La
+  [67, 5*Q, Q,    0.30], // Sol
+  [65, 6*Q, H+Q,  0.42], // Fa (retour)
+
+  // == PHRASE 2 : montée apaisante ==
+  [70, 8*Q,  Q,    0.35], // Sib
+  [69, 9*Q,  Q,    0.32], // La
+  [67, 10*Q, H,    0.38], // Sol
+  [65, 12*Q, H+Q,  0.40], // Fa
+
+  // == PHRASE 3 : souffle grave ==
+  [64, 14*Q, Q,    0.32], // Mi
+  [65, 15*Q, Q,    0.35], // Fa
+  [67, 16*Q, H,    0.40], // Sol
+  [69, 18*Q, Q,    0.38], // La
+  [70, 19*Q, Q,    0.35], // Sib
+  [72, 20*Q, H+Q,  0.42], // Do (culminant, doux)
+
+  // == PHRASE 4 : descente bercante ==
+  [70, 22*Q, Q,    0.33], // Sib
+  [69, 23*Q, Q,    0.30], // La
+  [67, 24*Q, Q,    0.32], // Sol
+  [65, 25*Q, H,    0.38], // Fa
+  [64, 27*Q, Q,    0.28], // Mi
+  [65, 28*Q, W+H,  0.35], // Fa (long, repos)
+
+  // Accords main gauche — arpèges très doux
+  // F maj : F2-La2-Do3
+  [41, 0*Q,  H+Q, 0.20], [53, 0*Q+0.08, H+Q, 0.15], [60, 0*Q+0.16, H+Q, 0.12],
+  [41, 2*Q,  Q,   0.18], [53, 2*Q+0.08, Q,   0.13],
+  [41, 3*Q,  H,   0.20], [53, 3*Q+0.08, H,   0.15], [60, 3*Q+0.16, H,   0.12],
+  [41, 5*Q,  Q,   0.18],
+  [41, 6*Q,  H+Q, 0.20], [53, 6*Q+0.08, H+Q, 0.15], [60, 6*Q+0.16, H+Q, 0.12],
+  // C maj : Do2-Mi2-Sol2
+  [36, 8*Q,  Q,   0.18], [52, 8*Q+0.08, Q,   0.13], [55, 8*Q+0.16, Q,   0.10],
+  [36, 9*Q,  Q,   0.18],
+  [36,10*Q,  H,   0.20], [52,10*Q+0.08, H,   0.14], [55,10*Q+0.16, H,   0.11],
+  [41,12*Q,  H+Q, 0.20], [53,12*Q+0.08, H+Q, 0.15], [60,12*Q+0.16, H+Q, 0.12],
+  // Bb maj : Sib1-Ré2-Fa2
+  [34,14*Q,  Q,   0.18], [50,14*Q+0.08, Q,   0.13], [53,14*Q+0.16, Q,   0.10],
+  [34,15*Q,  Q,   0.17],
+  [31,16*Q,  H,   0.20], [50,16*Q+0.08, H,   0.14], [55,16*Q+0.16, H,   0.11],
+  [36,18*Q,  Q,   0.18], [52,18*Q+0.08, Q,   0.13], [55,18*Q+0.16, Q,   0.10],
+  [36,19*Q,  Q,   0.17],
+  [36,20*Q,  H+Q, 0.20], [52,20*Q+0.08, H+Q, 0.14], [55,20*Q+0.16, H+Q, 0.11],
+  // Retour F maj
+  [34,22*Q,  Q,   0.17], [50,22*Q+0.08, Q,   0.12],
+  [36,24*Q,  Q,   0.18], [52,24*Q+0.08, Q,   0.13],
+  [41,25*Q,  H,   0.20], [53,25*Q+0.08, H,   0.15], [60,25*Q+0.16, H,   0.12],
+  [41,27*Q,  Q,   0.18],
+  [41,28*Q,  W+H, 0.20], [53,28*Q+0.08, W+H, 0.15], [60,28*Q+0.16, W+H, 0.12],
+];
+
+const DUREE_TOTALE = (28+6) * Q; // ~35.4s puis boucle
+
+function jouerBerceuse(){
+  if(!_playing) return;
+  const ctx = getCtx();
+  const now = ctx.currentTime + 0.1;
+  BERCEUSE.forEach(([midi,trel,dur,vel])=> note(midi, now+trel, dur, vel));
+  _loopTimer = setTimeout(jouerBerceuse, (DUREE_TOTALE - 0.5)*1000);
+}
+
+function fadeGain(from,to,dur){
+  const ctx=getCtx();
+  _masterGain.gain.cancelScheduledValues(ctx.currentTime);
+  _masterGain.gain.setValueAtTime(from, ctx.currentTime);
+  _masterGain.gain.linearRampToValueAtTime(to, ctx.currentTime+dur);
+}
+
+function demarrerMusique(){
+  if(_playing) return;
+  getCtx();
+  if(_ctx.state==='suspended') _ctx.resume();
+  _playing=true;
+  fadeGain(0, 0.12, 2.5); // volume très doux, fondu d'entrée 2.5s
+  jouerBerceuse();
+}
+
+
+function arreterMusique(){
+  if(!_playing) return;
+  _playing=false;
+  clearTimeout(_loopTimer);
+  if(_ctx) fadeGain(0.12,0,1.5);
+}
+
+// Démarrage auto au premier clic/toucher (contournement politique navigateurs)
+function autoStartHandler(){
+  demarrerMusique();
+  document.removeEventListener('click', autoStartHandler);
+  document.removeEventListener('touchstart', autoStartHandler);
+  document.removeEventListener('keydown', autoStartHandler);
+}
+document.addEventListener('click', autoStartHandler);
+document.addEventListener('touchstart', autoStartHandler, {passive:true});
+document.addEventListener('keydown', autoStartHandler);
+
+// Arrêt quand l'utilisateur quitte la page
+window.addEventListener('beforeunload', arreterMusique);
+window.addEventListener('pagehide', arreterMusique);
+
+// Suspendre audio quand l'onglet est caché (économie batterie mobile)
+document.addEventListener('visibilitychange', ()=>{
+  if(!_ctx) return;
+  if(document.hidden){ if(_ctx) _ctx.suspend(); }
+  else if(_playing && _ctx){ _ctx.resume(); }
+});
+
+// Keyboard accessibility - Escape ferme la modal
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape') fermerModalBtn();
+});
 
 function notif(msg){
   const el=document.getElementById('notif');el.innerHTML=msg;el.classList.add('show');
