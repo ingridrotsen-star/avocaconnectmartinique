@@ -3,7 +3,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="description" content="AvocaConnect Martinique - Trouvez le bon avocat pour votre situation juridique en Martinique.">
 <meta name="theme-color" content="#1E3557">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,43 +16,79 @@
   --or:#C9A55A;--or-clair:#d9b878;--or-pale:#f0dba8;
   --blanc:#F8F6F2;--blanc-pur:#ffffff;
   --gris:#e8e4db;--gris-f:#6b6357;
-  --vert:#4ac178;--rouge:#e05252;
+  --vert:#4ac178;
   --ombre:rgba(30,53,87,0.13);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;font-family:'Jost',sans-serif;background:var(--bleu);}
 
-/* ── PAGES ── */
-.page{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transform:translateX(60px);transition:opacity .38s ease,transform .38s ease;}
-.page.active{opacity:1;pointer-events:all;transform:translateX(0);}
-.page.exit-left{opacity:0;transform:translateX(-60px);}
+/* PAGES */
+.page{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  opacity:0;pointer-events:none;
+  transform:translate3d(60px,0,0);
+  transition:opacity .22s ease,transform .22s ease;
+  will-change:transform,opacity;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+}
+.page.active{opacity:1;pointer-events:all;transform:translate3d(0,0,0);}
+.page.exit-left{opacity:0;transform:translate3d(-60px,0,0);}
 
-/* ── NAV ── */
-nav{flex-shrink:0;background:rgba(30,53,87,.97);backdrop-filter:blur(12px);padding:0 1.5rem;height:58px;min-height:58px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,165,90,.25);position:sticky;top:0;z-index:10;}
+/* NAV */
+nav{
+  flex-shrink:0;background:rgba(30,53,87,.97);backdrop-filter:blur(12px);
+  padding:0 1.5rem;height:58px;min-height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(201,165,90,.25);
+  position:sticky;top:0;z-index:10;
+}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--blanc);letter-spacing:.04em;}
 .nav-logo span{color:var(--or);}
-.btn-retour{display:flex;align-items:center;gap:.4rem;background:transparent;border:1px solid rgba(201,165,90,.35);color:rgba(248,246,242,.8);font-family:'Jost',sans-serif;font-size:.78rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;border-radius:2px;cursor:pointer;transition:all .2s;}
+.btn-retour{
+  display:flex;align-items:center;gap:.4rem;
+  background:transparent;border:1px solid rgba(201,165,90,.35);
+  color:rgba(248,246,242,.8);font-family:'Jost',sans-serif;
+  font-size:.78rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;
+  padding:.45rem 1rem;border-radius:2px;cursor:pointer;transition:all .2s;
+}
 .btn-retour:hover{border-color:var(--or);color:var(--or);}
 .nav-etape{font-size:.72rem;color:rgba(201,165,90,.6);letter-spacing:.12em;text-transform:uppercase;}
 
-/* ── PROGRESS ── */
+/* PROGRESS */
 .progress-bar{height:3px;background:rgba(201,165,90,.15);flex-shrink:0;}
 .progress-fill{height:100%;background:var(--or);transition:width .5s ease;}
 
-/* ── BTNS ── */
-.btn-or{display:inline-flex;align-items:center;gap:.7rem;background:var(--or);color:var(--bleu);font-family:'Jost',sans-serif;font-size:.92rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:1rem 2.5rem;border:none;border-radius:2px;cursor:pointer;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 4px 24px rgba(201,165,90,.35);}
+/* BOUTONS */
+.btn-or{
+  display:inline-flex;align-items:center;gap:.7rem;
+  background:var(--or);color:var(--bleu);
+  font-family:'Jost',sans-serif;font-size:.92rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:1rem 2.5rem;border:none;border-radius:2px;cursor:pointer;
+  transition:background .25s,transform .2s,box-shadow .25s;
+  box-shadow:0 4px 24px rgba(201,165,90,.35);
+}
 .btn-or:hover{background:var(--or-clair);transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,165,90,.45);}
+.btn-or:disabled{background:var(--gris);color:var(--gris-f);cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* LAYOUT */
 .page-body{flex:1;padding:2.5rem 1.5rem 4rem;max-width:920px;width:100%;margin:0 auto;}
 .section-titre{text-align:center;margin-bottom:2.5rem;}
 .surtitre{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--or);font-weight:500;margin-bottom:.6rem;}
 .section-titre h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:600;color:var(--bleu);line-height:1.2;}
+.section-titre h2.blanc{color:var(--blanc);}
 .section-titre p{margin-top:.8rem;font-size:.92rem;color:var(--gris-f);font-weight:300;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.section-titre p.blanc{color:rgba(248,246,242,.6);}
 .diviseur{width:44px;height:2px;background:var(--or);margin:1rem auto 0;border-radius:1px;}
 .page-footer{text-align:center;margin-top:2.5rem;}
 
-/* ── PAGE 1 HERO ── */
+/* PAGE 1 HERO */
 #p1{background:var(--bleu);}
-.hero-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem 5rem;position:relative;overflow:hidden;}
+.hero-body{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:3rem 2rem 5rem;position:relative;overflow:hidden;
+}
 .hero-body::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(201,165,90,.09) 0%,transparent 70%);pointer-events:none;}
 .hero-balance{font-size:clamp(4.5rem,18vw,8rem);animation:float 4s ease-in-out infinite;margin-bottom:1.2rem;filter:drop-shadow(0 8px 32px rgba(201,165,90,.3));line-height:1;}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-14px) rotate(1deg);}}
@@ -64,7 +100,7 @@ nav{flex-shrink:0;background:rgba(30,53,87,.97);backdrop-filter:blur(12px);paddi
 .scroll-hint::after{content:'';width:1px;height:32px;background:linear-gradient(to bottom,rgba(201,165,90,.45),transparent);}
 @keyframes pulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 
-/* ── PAGE 2 STEPS ── */
+/* PAGE 2 STEPS */
 #p2{background:var(--blanc);}
 .steps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
 .step-card{background:var(--blanc-pur);border:1px solid var(--gris);border-top:3px solid var(--or);padding:1.75rem 1.25rem;border-radius:2px;transition:transform .25s,box-shadow .25s;position:relative;}
@@ -74,16 +110,17 @@ nav{flex-shrink:0;background:rgba(30,53,87,.97);backdrop-filter:blur(12px);paddi
 .step-card h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--bleu);margin-bottom:.5rem;}
 .step-card p{font-size:.83rem;color:var(--gris-f);line-height:1.65;font-weight:300;}
 
-/* ── PAGE 3 FORM ── */
+/* PAGE 3 FORMULAIRE */
 #p3{background:var(--bleu);}
-#p3 .page-body{max-width:680px;}
-#p3 .section-titre h2{color:var(--blanc);}
-#p3 .section-titre p{color:rgba(248,246,242,.6);}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.1rem;}
 .form-group{display:flex;flex-direction:column;gap:.35rem;}
 .form-group.full{grid-column:1/-1;}
 label{font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(248,246,242,.6);}
-input,textarea{background:rgba(248,246,242,.06);border:1px solid rgba(201,165,90,.22);border-radius:2px;padding:.7rem .9rem;font-family:'Jost',sans-serif;font-size:.92rem;font-weight:300;color:var(--blanc);transition:border-color .2s,background .2s;outline:none;-webkit-appearance:none;}
+input,textarea{
+  background:rgba(248,246,242,.06);border:1px solid rgba(201,165,90,.22);border-radius:2px;
+  padding:.7rem .9rem;font-family:'Jost',sans-serif;font-size:.92rem;font-weight:300;
+  color:var(--blanc);transition:border-color .2s,background .2s;outline:none;-webkit-appearance:none;
+}
 input::placeholder,textarea::placeholder{color:rgba(248,246,242,.28);}
 input:focus,textarea:focus{border-color:var(--or);background:rgba(201,165,90,.07);}
 textarea{resize:vertical;min-height:110px;}
@@ -94,8 +131,10 @@ textarea{resize:vertical;min-height:110px;}
 .dots span:nth-child(3){animation-delay:.4s;}
 @keyframes dotpulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
 .analyse-txt{font-size:.85rem;color:rgba(248,246,242,.7);font-weight:300;}
+.msg-aide{display:none;margin-top:1rem;background:rgba(201,165,90,.1);border:1px solid rgba(201,165,90,.3);border-radius:2px;padding:1rem 1.25rem;font-size:.82rem;color:rgba(248,246,242,.8);line-height:1.8;}
+.msg-aide em{color:rgba(248,246,242,.55);font-size:.75rem;}
 
-/* ── PAGE 4 AVOCATS ── */
+/* PAGE 4 AVOCATS */
 #p4{background:#f0ede6;}
 #p4 nav{background:rgba(30,53,87,.99);}
 .orientation-banner{background:var(--bleu);border-left:3px solid var(--or);padding:1rem 1.25rem;border-radius:0 2px 2px 0;margin-bottom:2rem;}
@@ -103,7 +142,7 @@ textarea{resize:vertical;min-height:110px;}
 .orientation-banner .dom-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--or);}
 .orientation-banner .sub{font-size:.8rem;color:rgba(248,246,242,.6);font-weight:300;margin-top:.2rem;}
 .avocats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;}
-.avocat-card{background:var(--blanc-pur);border:1px solid var(--gris);border-radius:2px;overflow:hidden;transition:transform .22s,box-shadow .22s;cursor:pointer;}
+.avocat-card{background:var(--blanc-pur);border:1px solid var(--gris);border-radius:2px;overflow:hidden;transition:transform .22s,box-shadow .22s;}
 .avocat-card:hover{transform:translateY(-3px);box-shadow:0 10px 36px var(--ombre);}
 .avocat-head{background:var(--bleu);padding:1.25rem 1.25rem 1rem;display:flex;align-items:center;gap:.9rem;position:relative;}
 .avocat-avatar{width:50px;height:50px;border-radius:50%;border:2px solid var(--or);background:var(--bleu-pale);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--or);flex-shrink:0;}
@@ -114,10 +153,16 @@ textarea{resize:vertical;min-height:110px;}
 .dispo-badge.rdv{background:rgba(201,165,90,.18);color:var(--or);border:1px solid rgba(201,165,90,.3);}
 .avocat-body{padding:1.1rem 1.25rem;}
 .adet{display:flex;align-items:center;gap:.45rem;font-size:.8rem;color:var(--gris-f);margin-bottom:.35rem;}
-.btn-cal{display:flex;align-items:center;justify-content:center;gap:.45rem;margin-top:1rem;background:var(--bleu);border:none;color:var(--or);font-family:'Jost',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.7rem 1rem;border-radius:2px;cursor:pointer;transition:background .2s;width:100%;}
+.btn-cal{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  margin-top:1rem;background:var(--bleu);border:none;color:var(--or);
+  font-family:'Jost',sans-serif;font-size:.78rem;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;
+  padding:.7rem 1rem;border-radius:2px;cursor:pointer;transition:background .2s;width:100%;
+}
 .btn-cal:hover{background:var(--bleu-pale);}
 
-/* ── MODAL CALENDRIER ── */
+/* MODAL CALENDRIER */
 .modal-overlay{position:fixed;inset:0;background:rgba(20,35,60,.72);z-index:200;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--blanc-pur);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-radius:12px 12px 0 0;padding:0 0 2rem;}
@@ -127,8 +172,6 @@ textarea{resize:vertical;min-height:110px;}
 .modal-header .spe-m{font-size:.75rem;color:var(--or);margin-top:.15rem;}
 .btn-close{background:transparent;border:1px solid rgba(201,165,90,.3);color:rgba(248,246,242,.7);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
 .btn-close:hover{border-color:var(--or);color:var(--or);}
-
-/* Calendrier */
 .cal-wrap{padding:1.25rem 1.5rem 0;}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
 .cal-mois{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--bleu);}
@@ -142,24 +185,19 @@ textarea{resize:vertical;min-height:110px;}
 .cal-day.dispo{background:rgba(74,193,120,.12);color:#2a7a4a;font-weight:600;cursor:pointer;border:1px solid rgba(74,193,120,.25);transition:all .15s;}
 .cal-day.dispo:hover{background:rgba(74,193,120,.25);transform:scale(1.08);}
 .cal-day.indispo{background:rgba(224,82,82,.07);color:#bbb;font-size:.75rem;border:1px solid rgba(224,82,82,.12);}
-.cal-day.selected{background:var(--or) !important;color:var(--bleu) !important;font-weight:700;border-color:var(--or) !important;transform:scale(1.1);}
+.cal-day.selected{background:var(--or)!important;color:var(--bleu)!important;font-weight:700;border-color:var(--or)!important;transform:scale(1.1);}
 .cal-day.today{outline:2px solid var(--or);outline-offset:1px;}
-
 .cal-legende{display:flex;gap:1rem;margin:.9rem 0;flex-wrap:wrap;}
 .leg-item{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--gris-f);}
 .leg-dot{width:10px;height:10px;border-radius:2px;}
 .leg-dot.v{background:rgba(74,193,120,.25);border:1px solid rgba(74,193,120,.4);}
 .leg-dot.r{background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.2);}
 .leg-dot.o{background:var(--or);}
-
-/* Créneaux */
 .creneaux-titre{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bleu);margin:1.2rem 0 .7rem;}
 .creneaux-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;}
 .creneau{background:rgba(30,53,87,.06);border:1px solid rgba(30,53,87,.12);padding:.5rem;border-radius:4px;text-align:center;font-size:.8rem;font-weight:500;color:var(--bleu);cursor:pointer;transition:all .15s;}
 .creneau:hover{background:rgba(201,165,90,.15);border-color:var(--or);}
 .creneau.sel{background:var(--bleu);color:var(--or);border-color:var(--bleu);}
-
-/* Formulaire RDV */
 .rdv-form{margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--gris);}
 .rdv-form h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--bleu);margin-bottom:.9rem;}
 .rdv-recap{background:rgba(201,165,90,.1);border:1px solid rgba(201,165,90,.25);border-radius:4px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.83rem;color:var(--bleu);line-height:1.7;}
@@ -171,15 +209,12 @@ textarea{resize:vertical;min-height:110px;}
 .rdv-field textarea{min-height:80px;resize:vertical;}
 .btn-rdv{width:100%;background:var(--or);color:var(--bleu);border:none;padding:.85rem;border-radius:4px;font-family:'Jost',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;margin-top:.5rem;}
 .btn-rdv:hover{background:var(--or-clair);transform:translateY(-1px);}
-.btn-rdv:disabled{background:var(--gris);color:var(--gris-f);cursor:not-allowed;transform:none;}
-
-/* Confirmation */
 .rdv-confirm{display:none;text-align:center;padding:2rem 1.5rem;}
 .rdv-confirm .check{font-size:3rem;margin-bottom:1rem;}
 .rdv-confirm h4{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--bleu);margin-bottom:.75rem;}
 .rdv-confirm p{font-size:.88rem;color:var(--gris-f);line-height:1.7;font-weight:300;}
 
-/* ── PAGE 5 FINALE ── */
+/* PAGE 5 FINALE */
 #p5{background:var(--bleu);}
 .finale-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem 4rem;position:relative;overflow:hidden;}
 .finale-body::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,165,90,.07) 0%,transparent 70%);pointer-events:none;}
@@ -193,28 +228,25 @@ textarea{resize:vertical;min-height:110px;}
 .finale-sig{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,246,242,.38);font-weight:300;border-top:1px solid rgba(201,165,90,.18);padding-top:1.5rem;max-width:400px;margin:0 auto;line-height:1.8;}
 .finale-sig strong{color:var(--or);font-weight:500;}
 
-/* ── NOTIF ── */
+/* NOTIFICATION */
 .notif{display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bleu);border:1px solid var(--or);color:var(--blanc);padding:.9rem 1.5rem;border-radius:2px;font-size:.85rem;font-weight:300;box-shadow:0 8px 32px rgba(30,53,87,.5);z-index:999;animation:slideUp .3s ease;white-space:nowrap;max-width:90vw;text-align:center;}
 .notif.show{display:block;}
 @keyframes slideUp{from{transform:translateX(-50%) translateY(10px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
 
-
-
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:520px){
   .form-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr;}
   .avocats-grid{grid-template-columns:1fr;}
   .creneaux-grid{grid-template-columns:repeat(2,1fr);}
   .btn-or{width:100%;justify-content:center;}
   .cal-day{font-size:.72rem;}
-  .btn-music{bottom:1rem;right:1rem;width:40px;height:40px;}
-  .music-tip{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ══ PAGE 1 : ACCUEIL ══ -->
+<!-- PAGE 1 : ACCUEIL -->
 <div class="page active" id="p1">
   <nav>
     <div class="nav-logo">⚖️ Avoca<span>Connect</span></div>
@@ -231,7 +263,7 @@ textarea{resize:vertical;min-height:110px;}
   </div>
 </div>
 
-<!-- ══ PAGE 2 : FONCTIONNEMENT ══ -->
+<!-- PAGE 2 : FONCTIONNEMENT -->
 <div class="page" id="p2">
   <nav>
     <button class="btn-retour" onclick="aller(2,1)">← Retour</button>
@@ -255,43 +287,50 @@ textarea{resize:vertical;min-height:110px;}
   </div>
 </div>
 
-<!-- ══ PAGE 3 : FORMULAIRE ══ -->
+<!-- PAGE 3 : FORMULAIRE -->
 <div class="page" id="p3">
   <nav>
     <button class="btn-retour" onclick="aller(3,2)">← Retour</button>
     <div class="nav-etape">Votre situation</div>
   </nav>
   <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
-  <div class="page-body">
+  <div class="page-body" style="max-width:680px;">
     <div class="section-titre">
       <div class="surtitre">Votre demande</div>
-      <h2>Décrivez votre situation</h2>
+      <h2 class="blanc">Décrivez votre situation</h2>
       <div class="diviseur"></div>
-      <p>Remplissez ce formulaire pour être orienté vers l'avocat le plus adapté à votre besoin.</p>
+      <p class="blanc">Remplissez ce formulaire pour être orienté vers l'avocat le plus adapté à votre besoin.</p>
     </div>
     <div class="form-grid">
       <div class="form-group"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="family-name"></div>
       <div class="form-group"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="given-name"></div>
       <div class="form-group"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="+596 696 XX XX XX" autocomplete="tel"></div>
       <div class="form-group"><label>Adresse e-mail</label><input type="email" id="f-email" placeholder="votre@email.com" autocomplete="email"></div>
-      <div class="form-group full"><label>Décrivez votre problème</label><textarea id="f-message" placeholder="Ex : Je suis victime de harcèlement au travail depuis plusieurs mois…&#10;&#10;Plus vous êtes précis(e), meilleure sera l'orientation."></textarea></div>
+      <div class="form-group full"><label>Décrivez votre problème</label><textarea id="f-message" placeholder="Ex : Mon oncle me touche de manière inappropriée…&#10;Ex : Je suis victime de violence de mon mari…&#10;&#10;Décrivez librement, nous vous orientons vers le bon avocat."></textarea></div>
     </div>
-    <button class="btn-or" style="width:100%;justify-content:center;" onclick="analyserDemande()">📨 Analyser ma situation</button>
+    <button class="btn-or" id="btn-analyser" style="width:100%;justify-content:center;" onclick="analyserDemande()">📨 Analyser ma situation</button>
     <div class="analyse-box" id="analyse-box">
       <div class="dots"><span></span><span></span><span></span></div>
       <div class="analyse-txt" id="analyse-txt">Analyse en cours…</div>
     </div>
+    <div class="msg-aide" id="msg-aide">
+      ⚠️ <strong style="color:var(--or)">Précisez votre situation</strong> — par exemple :<br>
+      <em>— « Mon mari me frappe »</em><br>
+      <em>— « J'ai été victime d'un vol »</em><br>
+      <em>— « Mon patron m'a licencié injustement »</em><br>
+      <em>— « Mon propriétaire garde ma caution »</em>
+    </div>
   </div>
 </div>
 
-<!-- ══ PAGE 4 : AVOCATS ══ -->
+<!-- PAGE 4 : AVOCATS -->
 <div class="page" id="p4">
   <nav>
     <button class="btn-retour" onclick="aller(4,3)">← Retour</button>
     <div class="nav-etape">Avocats recommandés</div>
   </nav>
   <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-  <div class="page-body">
+  <div class="page-body" style="max-width:1000px;">
     <div class="orientation-banner">
       <div class="lbl">Domaine identifié</div>
       <div class="dom-name" id="domain-name">–</div>
@@ -304,7 +343,7 @@ textarea{resize:vertical;min-height:110px;}
   </div>
 </div>
 
-<!-- ══ PAGE 5 : FINALE ══ -->
+<!-- PAGE 5 : FINALE -->
 <div class="page" id="p5">
   <nav style="justify-content:center;">
     <div class="nav-logo">⚖️ Avoca<span>Connect</span></div>
@@ -319,18 +358,15 @@ textarea{resize:vertical;min-height:110px;}
   </div>
 </div>
 
-<!-- ══ MODAL CALENDRIER ══ -->
+<!-- MODAL CALENDRIER -->
 <div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
   <div class="modal" id="modal">
     <div class="modal-header">
-      <div>
-        <h3 id="modal-nom">Maître –</h3>
-        <div class="spe-m" id="modal-spe">–</div>
-      </div>
+      <div><h3 id="modal-nom">Maître –</h3><div class="spe-m" id="modal-spe">–</div></div>
       <button class="btn-close" onclick="fermerModalBtn()">✕</button>
     </div>
     <div id="modal-contenu">
-      <div class="cal-wrap">
+      <div class="cal-wrap" id="cal-wrap">
         <div class="cal-nav">
           <button class="cal-btn" onclick="changerMois(-1)">‹</button>
           <div class="cal-mois" id="cal-mois-label"></div>
@@ -353,7 +389,7 @@ textarea{resize:vertical;min-height:110px;}
           <div class="rdv-field"><label>Téléphone</label><input type="tel" id="rdv-tel" placeholder="+596 696 XX XX XX"></div>
           <div class="rdv-field"><label>E-mail</label><input type="email" id="rdv-email" placeholder="votre@email.com"></div>
           <div class="rdv-field"><label>Objet du rendez-vous</label><textarea id="rdv-objet" placeholder="Résumez brièvement votre situation…"></textarea></div>
-          <button class="btn-rdv" id="btn-rdv-envoyer" onclick="confirmerRDV()">✓ Confirmer le rendez-vous</button>
+          <button class="btn-rdv" onclick="confirmerRDV()">✓ Confirmer le rendez-vous</button>
         </div>
       </div>
       <div class="rdv-confirm" id="rdv-confirm">
@@ -367,114 +403,266 @@ textarea{resize:vertical;min-height:110px;}
 
 <div class="notif" id="notif"></div>
 
-
-
-
 <script>
-// ── BASE DE DONNÉES : 3 avocats minimum par catégorie ──
+// ══════════════════════════════════════════════
+// BASE DE DONNÉES — 3 avocats par catégorie
+// ══════════════════════════════════════════════
 const avocats = [
-  // PÉNAL
   {id:1,i:'JD',nom:'Maître Jean Dupont',spe:'Droit pénal',dom:'pénal',ville:'Fort-de-France',exp:'18 ans',tel:'+596 696 12 34 56'},
   {id:2,i:'NB',nom:'Maître Nathalie Bellamy',spe:'Droit pénal',dom:'pénal',ville:'Sainte-Marie',exp:'8 ans',tel:'+596 696 54 09 27'},
   {id:3,i:'RC',nom:'Maître Roland Césaire',spe:'Droit pénal',dom:'pénal',ville:'Le Marin',exp:'15 ans',tel:'+596 596 74 88 01'},
-  // FAMILLE
   {id:4,i:'SM',nom:'Maître Sophie Martin',spe:'Droit de la famille',dom:'famille',ville:'Le Lamentin',exp:'12 ans',tel:'+596 596 63 21 00'},
   {id:5,i:'EV',nom:'Maître Étienne Valois',spe:'Droit de la famille',dom:'famille',ville:'Fort-de-France',exp:'20 ans',tel:'+596 596 71 33 66'},
   {id:6,i:'LA',nom:'Maître Laura Amédée',spe:'Droit de la famille',dom:'famille',ville:'Schoelcher',exp:'6 ans',tel:'+596 696 30 45 72'},
-  // TRAVAIL
   {id:7,i:'PL',nom:'Maître Pierre Laurent',spe:'Droit du travail',dom:'travail',ville:'Fort-de-France',exp:'9 ans',tel:'+596 696 45 78 90'},
   {id:8,i:'KM',nom:'Maître Karine Manville',spe:'Droit du travail',dom:'travail',ville:'Le Lamentin',exp:'13 ans',tel:'+596 596 68 22 55'},
   {id:9,i:'FP',nom:'Maître Franck Pelage',spe:'Droit du travail',dom:'travail',ville:'Rivière-Pilote',exp:'10 ans',tel:'+596 696 87 60 14'},
-  // VICTIMES
   {id:10,i:'MR',nom:'Maître Marie Robert',spe:'Droit des victimes',dom:'victimes',ville:'Le Robert',exp:'14 ans',tel:'+596 596 74 55 10'},
   {id:11,i:'GN',nom:'Maître Gaël Nabet',spe:'Droit des victimes',dom:'victimes',ville:'Fort-de-France',exp:'11 ans',tel:'+596 696 23 88 47'},
   {id:12,i:'IS',nom:'Maître Isabelle Sainte-Rose',spe:'Droit des victimes',dom:'victimes',ville:'Le François',exp:'7 ans',tel:'+596 696 52 17 39'},
-  // IMMOBILIER
   {id:13,i:'AB',nom:'Maître Alain Bernard',spe:'Droit immobilier',dom:'immobilier',ville:'Schoelcher',exp:'21 ans',tel:'+596 696 23 67 41'},
   {id:14,i:'DL',nom:'Maître Dominique Lerat',spe:'Droit immobilier',dom:'immobilier',ville:'Fort-de-France',exp:'17 ans',tel:'+596 596 60 99 11'},
   {id:15,i:'YC',nom:'Maître Yvette Clarice',spe:'Droit immobilier',dom:'immobilier',ville:'Trinité',exp:'9 ans',tel:'+596 696 41 28 63'},
-  // ADMINISTRATIF
   {id:16,i:'CD',nom:'Maître Claire Dubois',spe:'Droit administratif',dom:'administratif',ville:'Fort-de-France',exp:'11 ans',tel:'+596 596 60 48 82'},
   {id:17,i:'BT',nom:'Maître Bernard Taly',spe:'Droit administratif',dom:'administratif',ville:'Le Lamentin',exp:'16 ans',tel:'+596 596 51 77 34'},
   {id:18,i:'AM',nom:'Maître Annick Montrose',spe:'Droit administratif',dom:'administratif',ville:'Saint-Pierre',exp:'8 ans',tel:'+596 696 62 35 90'},
-  // AFFAIRES
   {id:19,i:'TF',nom:'Maître Thomas Fontaine',spe:'Droit des affaires',dom:'affaires',ville:'Le Lamentin',exp:'16 ans',tel:'+596 696 87 32 15'},
   {id:20,i:'OG',nom:'Maître Olivier Germain',spe:'Droit des affaires',dom:'affaires',ville:'Fort-de-France',exp:'22 ans',tel:'+596 596 70 14 28'},
   {id:21,i:'PR',nom:'Maître Pascale Renard',spe:'Droit des affaires',dom:'affaires',ville:'Trois-Îlets',exp:'12 ans',tel:'+596 696 44 06 57'},
 ];
 
-const keywords={
-  pénal:['harcèlement','agression','violence','vol','escroquerie','arnaque','fraude','menace','coups','blessures','abus','pénal','criminel','plainte','voie de fait','meurtre','cambriolage'],
-  famille:['divorce','garde','enfant','pension','mariage','séparation','héritage','succession','adoption','famille','époux','conjoint','tutelle','autorité parentale','pension alimentaire'],
-  travail:['licenciement','employeur','travail','chômage','salaire','contrat','grève','discrimination','syndicat','cdi','cdd','poste','rupture conventionnelle','heures sup','mobbing'],
-  victimes:['victime','accident','préjudice','indemnisation','assurance','dommage','responsabilité','blessé','traumatisme','réparation','sinistre'],
-  immobilier:['logement','bail','loyer','propriétaire','locataire','vente','achat','maison','appartement','terrain','foncier','notaire','copropriété','construction','promoteur'],
-  administratif:['administration','mairie','préfecture','permis','fonctionnaire','retraite','allocation','caf','impôt','expulsion','titre de séjour','visa','recours'],
-  affaires:['entreprise','société','contrat commercial','associé','créancier','dette','faillite','investissement','affaires','liquidation','sarl','sas','fusion','actionnaire'],
+const labels={
+  pénal:'Droit pénal',famille:'Droit de la famille',travail:'Droit du travail',
+  victimes:'Droit des victimes',immobilier:'Droit immobilier',
+  administratif:'Droit administratif',affaires:'Droit des affaires'
 };
-const labels={pénal:'Droit pénal',famille:'Droit de la famille',travail:'Droit du travail',victimes:'Droit des victimes',immobilier:'Droit immobilier',administratif:'Droit administratif',affaires:'Droit des affaires'};
 
-// ── Navigation ──
+// ══════════════════════════════════════════════
+// MOTS-CLÉS — couvre toutes les situations
+// ══════════════════════════════════════════════
+const keywords={
+  victimes:[
+    // Violences sexuelles et abus
+    'touche','touché','touchée','parties intimes','intime','sexuel','sexuelle',
+    'attouchement','attouchements','viol','violé','violée','viole',
+    'agression sexuelle','abus sexuel','inceste','pédophilie',
+    'oncle','tante','cousin','cousine','voisin','beau-père','ami de la famille',
+    'gestes déplacés','comportement déplacé','inapproprié','inappropriée',
+    // Violences physiques conjugales et familiales
+    'battu','battue','frappe','frappé','frappée','mari violent','femme violente',
+    'gifle','gifles','coup','coups','poing','poings','claque','claques',
+    'brutalise','brutalité','maltraité','maltraitée','maltraitance',
+    'blessé','blessée','marque','bleu','hématome','plaie',
+    'étranglé','étranglée','tabassé','tabassée','roué de coups',
+    'séquestré','séquestrée','enfermé','enfermée','prisonnier','prisonnière',
+    'violence conjugale','violence domestique','violences conjugales',
+    'violences domestiques','violence familiale','violences familiales',
+    'mari','compagnon','compagne','petit ami','petite amie',
+    // Menaces et danger
+    'menace','menacé','menacée','menaces de mort','mort','tuer',
+    'peur','terreur','terrorisé','terrorisée','danger','en danger',
+    'urgence','au secours','besoin aide','sos','aide moi',
+    // Victimes accidents et préjudices
+    'victime','accident','blessure','traumatisme','préjudice',
+    'indemnisation','assurance','dommage','réparation','sinistre',
+    'accident voiture','accident route','renversé','percuté','séquelle',
+    // Harcèlement
+    'harcelé','harcelée','harcèlement','harcèlement sexuel',
+    'cyberharcèlement','chantage','photo intime','revenge porn',
+    // Enfants
+    'enfant battu','enfant maltraité','enfant danger','protéger enfant',
+    'maltraitance enfant','abus enfant',
+  ],
+  pénal:[
+    'vol','volé','volée','cambriolage','cambriolé','cambriolée',
+    'escroquerie','arnaque','arnaqué','arnaquée','fraude','fraudé',
+    'chantage','extorsion','racket','racketter',
+    'insulte','insulté','injure','diffamation','calomnie',
+    'bagarre','rixe','voie de fait','coups blessures',
+    'plainte','porter plainte','dépôt plainte','gendarmerie','police','procureur',
+    'garde vue','convocation','tribunal','jugement','condamné','prison',
+    'infraction','délit','crime','pénal','criminel','casier',
+    'cyberharcèlement','harcèlement ligne','réseaux sociaux',
+  ],
+  famille:[
+    'divorce','divorcer','séparation','séparer','rupture','quitter mari','quitter femme',
+    'garde','garde enfants','pension alimentaire','pension impayée',
+    'mariage','pacs','union libre','concubinage',
+    'père','mère','autorité parentale','droit visite','tutelle',
+    'héritage','succession','testament','décès','mort','défunt',
+    'adoption','famille','placement','aide sociale enfance',
+    'violence conjugale','partir foyer','quitter domicile',
+  ],
+  travail:[
+    'licencié','licenciée','licenciement','renvoyé','renvoyée','viré','virée',
+    'employeur','patron','chef','directeur',
+    'salaire','pas payé','salaire impayé','heures sup',
+    'contrat','cdi','cdd','stage','apprenti','alternance',
+    'chômage','pôle emploi','france travail',
+    'harcèlement travail','harcèlement moral','discrimination travail',
+    'accident travail','maladie professionnelle','arrêt travail',
+    'démission','rupture conventionnelle','indemnités',
+    'travail noir','syndicat','grève',
+  ],
+  immobilier:[
+    'loyer','loyer impayé','locataire','propriétaire','bail','location',
+    'caution','dépôt garantie','caution rendue','caution gardée',
+    'expulsion','expulsé','expulsée','mise rue','sans logement',
+    'logement insalubre','humidité','moisissures','froid','chauffage',
+    'travaux','charges','syndic','copropriété',
+    'achat','vente','maison','appartement','terrain','notaire',
+    'voisin','nuisances','bruit','tapage','squat',
+  ],
+  administratif:[
+    'caf','allocations','rsa','aah','aide sociale',
+    'sécurité sociale','cpam','remboursement','mutuelle',
+    'amende','contravention','permis conduire','carte grise',
+    'impôts','fisc','taxe','redressement',
+    'préfecture','mairie','titre séjour','visa','sans papiers','régularisation',
+    'retraite','invalidité','handicap','mdph',
+    'recours','contestation','refus aide','refus allocation',
+  ],
+  affaires:[
+    'entreprise','société','sarl','sas','auto entrepreneur','gérant',
+    'associé','actionnaire','faillite','liquidation','redressement judiciaire',
+    'client','fournisseur','facture impayée','contrat non respecté',
+    'concurrence déloyale','contrefaçon','marque',
+    'boutique','commerce','restaurant','artisan',
+    'dette','huissier','saisie','recouvrement',
+  ],
+};
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
 function aller(de,vers){
-  // Re-enable submit button if navigating away from p3
   if(de===3){
-    const b=document.querySelector('#p3 .btn-or');
+    const b=document.getElementById('btn-analyser');
     if(b){b.disabled=false;b.style.opacity='';}
   }
-  const o=document.getElementById('p'+de),d=document.getElementById('p'+vers);
+  const o=document.getElementById('p'+de);
+  const d=document.getElementById('p'+vers);
   o.classList.add('exit-left');
-  setTimeout(()=>{o.classList.remove('active','exit-left');d.classList.add('active');d.scrollTop=0;},370);
-}
-
-// ── Analyse ──
-function analyserDemande(){
-  const btnEnvoyer = document.querySelector('#p3 .btn-or');
-  if(btnEnvoyer && btnEnvoyer.disabled) return;
-  if(btnEnvoyer) { btnEnvoyer.disabled=true; btnEnvoyer.style.opacity='0.6'; }
-  const msg=document.getElementById('f-message').value.toLowerCase();
-  if(!msg.trim()){notif('⚠️ Veuillez décrire votre situation.');return;}
-  const boite=document.getElementById('analyse-box'),txt=document.getElementById('analyse-txt');
-  boite.style.display='block';
-  const etapes=['Lecture de votre situation…','Identification des mots-clés…','Détermination du domaine juridique…','Sélection des avocats partenaires…'];
-  let i=0; txt.textContent=etapes[0];
-  const iv=setInterval(()=>{i++;if(i<etapes.length)txt.textContent=etapes[i];else clearInterval(iv);},650);
   setTimeout(()=>{
-    boite.style.display='none';
-    let best='travail',bestScore=0;
-    for(const[dom,mots]of Object.entries(keywords)){const s=mots.filter(m=>msg.includes(m)).length;if(s>bestScore){bestScore=s;best=dom;}}
-    afficherAvocats(best);aller(3,4);
-  },2900);
+    o.classList.remove('active','exit-left');
+    d.classList.add('active');
+    d.scrollTop=0;
+  },220);
 }
 
-// ── Afficher avocats ──
+// ══════════════════════════════════════════════
+// ANALYSE PAR MOTS-CLÉS
+// ══════════════════════════════════════════════
+function analyserParMotsCles(msg){
+  // Normaliser le texte (enlever accents, minuscules)
+  const normaliser = s => s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/['']/g,"'");
+  
+  const m = normaliser(msg);
+  const mOriginal = msg.toLowerCase();
+  const scores={};
+  
+  for(const[dom,mots] of Object.entries(keywords)){
+    scores[dom]=mots.filter(kw=>{
+      const kwN = normaliser(kw);
+      if(mOriginal.includes(kw)) return true;
+      if(m.includes(kwN)) return true;
+      if(kwN.length>4 && (m.includes(kwN.slice(0,-1)) || m.includes(kwN.slice(0,-2)))) return true;
+      return false;
+    }).length;
+  }
+  
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  // Par défaut → victimes (situations les plus sensibles)
+  return sorted[0][1]>0 ? sorted[0][0] : 'victimes';
+}
+
+// ══════════════════════════════════════════════
+// ANALYSER LA DEMANDE
+// ══════════════════════════════════════════════
+function analyserDemande(){
+  const btn=document.getElementById('btn-analyser');
+  if(btn && btn.disabled) return;
+  
+  const msg=document.getElementById('f-message').value.trim();
+  if(!msg){
+    notif('⚠️ Veuillez décrire votre situation.');
+    return;
+  }
+  
+  // Désactiver bouton
+  if(btn){btn.disabled=true;btn.style.opacity='0.6';}
+  
+  // Cacher message aide si affiché
+  document.getElementById('msg-aide').style.display='none';
+  
+  // Afficher animation
+  const boite=document.getElementById('analyse-box');
+  const txt=document.getElementById('analyse-txt');
+  boite.style.display='block';
+  
+  const etapes=[
+    'Lecture de votre situation…',
+    'Identification des mots-clés…',
+    'Détermination du domaine juridique…',
+    'Sélection des avocats partenaires…'
+  ];
+  let i=0;
+  txt.textContent=etapes[0];
+  const iv=setInterval(()=>{
+    i++;
+    if(i<etapes.length) txt.textContent=etapes[i];
+    else clearInterval(iv);
+  },500);
+  
+  // Analyse après animation
+  setTimeout(()=>{
+    clearInterval(iv);
+    boite.style.display='none';
+    if(btn){btn.disabled=false;btn.style.opacity='';}
+    
+    const domaine=analyserParMotsCles(msg);
+    afficherAvocats(domaine);
+    aller(3,4);
+  },2000);
+}
+
+// ══════════════════════════════════════════════
+// AFFICHER LES AVOCATS
+// ══════════════════════════════════════════════
 function afficherAvocats(dom){
   document.getElementById('domain-name').textContent=labels[dom]||'Droit général';
+  
   const liste=avocats.filter(a=>a.dom===dom);
-  // Alterner dispo simulée
   document.getElementById('avocats-grid').innerHTML=liste.map((a,idx)=>{
     const dispoTexte=idx%3===1?'Sur rendez-vous':'Disponible';
     const dispoCls=dispoTexte==='Disponible'?'ok':'rdv';
-    return`<div class="avocat-card" onclick="ouvrirCalendrier(${a.id})">
+    return `<div class="avocat-card">
       <div class="avocat-head">
         <div class="avocat-avatar">${a.i}</div>
-        <div class="avocat-info"><h3>${a.nom}</h3><div class="spe">${a.spe}</div></div>
+        <div class="avocat-info">
+          <h3>${a.nom}</h3>
+          <div class="spe">${a.spe}</div>
+        </div>
         <div class="dispo-badge ${dispoCls}">${dispoTexte}</div>
       </div>
       <div class="avocat-body">
         <div class="adet">📍 ${a.ville}, Martinique</div>
         <div class="adet">⏳ ${a.exp} d'expérience</div>
         <div class="adet">📞 ${a.tel}</div>
-        <button class="btn-cal">📅 Voir les disponibilités</button>
+        <button class="btn-cal" onclick="ouvrirCalendrier(${a.id})">📅 Voir les disponibilités</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ── Calendrier ──
-let calState={avocat:null,annee:0,mois:0,jourSel:null,creneauSel:null,dispos:{}};
+// ══════════════════════════════════════════════
+// CALENDRIER
+// ══════════════════════════════════════════════
+let calState={avocat:null,annee:0,mois:0,jourSel:null,creneauSel:null};
 
 function genDispos(avId,annee,mois){
-  // Génération pseudo-aléatoire déterministe par avocat+mois
   const seed=avId*1000+annee*12+mois;
   const rng=s=>{let x=Math.sin(s)*10000;return x-Math.floor(x);};
   const jours={};
@@ -482,9 +670,7 @@ function genDispos(avId,annee,mois){
   for(let j=1;j<=nbJours;j++){
     const dow=new Date(annee,mois,j).getDay();
     if(dow===0||dow===6){jours[j]='indispo';continue;}
-    const r=rng(seed+j);
-    if(r<0.35)jours[j]='indispo';
-    else jours[j]='dispo';
+    jours[j]=rng(seed+j)<0.35?'indispo':'dispo';
   }
   return jours;
 }
@@ -498,22 +684,22 @@ function creneauxPour(avId,annee,mois,jour){
 
 function ouvrirCalendrier(avId){
   const av=avocats.find(a=>a.id===avId);
-  if(!av)return;
+  if(!av) return;
   const now=new Date();
-  calState={avocat:av,annee:now.getFullYear(),mois:now.getMonth(),jourSel:null,creneauSel:null,dispos:{}};
+  calState={avocat:av,annee:now.getFullYear(),mois:now.getMonth(),jourSel:null,creneauSel:null};
   document.getElementById('modal-nom').textContent=av.nom;
   document.getElementById('modal-spe').textContent=av.spe+' · '+av.ville;
   document.getElementById('creneaux-section').style.display='none';
   document.getElementById('rdv-form-wrap').style.display='none';
   document.getElementById('rdv-confirm').style.display='none';
-  document.getElementById('modal-contenu').querySelector('.cal-wrap').style.display='block';
-  // Pré-remplir nom depuis formulaire
+  document.getElementById('cal-wrap').style.display='block';
+  // Pré-remplir depuis formulaire
   const nom=(document.getElementById('f-prenom').value+' '+document.getElementById('f-nom').value).trim();
   const tel=document.getElementById('f-tel').value;
   const email=document.getElementById('f-email').value;
-  if(nom)document.getElementById('rdv-nom').value=nom;
-  if(tel)document.getElementById('rdv-tel').value=tel;
-  if(email)document.getElementById('rdv-email').value=email;
+  if(nom) document.getElementById('rdv-nom').value=nom;
+  if(tel) document.getElementById('rdv-tel').value=tel;
+  if(email) document.getElementById('rdv-email').value=email;
   renderCal();
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -523,26 +709,26 @@ function renderCal(){
   const now=new Date();
   const moisNoms=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
   document.getElementById('cal-mois-label').textContent=moisNoms[mois]+' '+annee;
-  calState.dispos=genDispos(avocat.id,annee,mois);
+  const dispos=genDispos(avocat.id,annee,mois);
   const premier=new Date(annee,mois,1).getDay();
-  const decalage=(premier===0?6:premier-1);
+  const decalage=premier===0?6:premier-1;
   const nbJours=new Date(annee,mois+1,0).getDate();
   const jours=['L','M','M','J','V','S','D'];
   let html=jours.map(j=>`<div class="cal-dow">${j}</div>`).join('');
-  for(let v=0;v<decalage;v++)html+=`<div class="cal-day vide"></div>`;
+  for(let v=0;v<decalage;v++) html+=`<div class="cal-day vide"></div>`;
   for(let j=1;j<=nbJours;j++){
     const date=new Date(annee,mois,j);
     const isPasse=date<new Date(now.getFullYear(),now.getMonth(),now.getDate());
     const isToday=j===now.getDate()&&mois===now.getMonth()&&annee===now.getFullYear();
-    const stat=calState.dispos[j]||'indispo';
-    if(isPasse){html+=`<div class="cal-day passe">${j}</div>`;}
-    else if(stat==='dispo'){
-      const sel=jourSel===j?' selected':'';
-      const tod=isToday?' today':'';
-      html+=`<div class="cal-day dispo${sel}${tod}" onclick="selJour(${j})">${j}</div>`;
-    }else{
-      const tod=isToday?' today':'';
-      html+=`<div class="cal-day indispo${tod}" title="Indisponible">${j}</div>`;
+    const stat=dispos[j]||'indispo';
+    const todayCls=isToday?' today':'';
+    if(isPasse){
+      html+=`<div class="cal-day passe">${j}</div>`;
+    } else if(stat==='dispo'){
+      const selCls=jourSel===j?' selected':'';
+      html+=`<div class="cal-day dispo${selCls}${todayCls}" onclick="selJour(${j})">${j}</div>`;
+    } else {
+      html+=`<div class="cal-day indispo${todayCls}">${j}</div>`;
     }
   }
   document.getElementById('cal-grid').innerHTML=html;
@@ -566,11 +752,10 @@ function selJour(j){
   const{avocat,annee,mois}=calState;
   const slots=creneauxPour(avocat.id,annee,mois,j);
   const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  document.getElementById('cren-date-label').textContent=`${j} ${moisNoms[mois]} ${annee}`;
+  document.getElementById('cren-date-label').textContent=j+' '+moisNoms[mois]+' '+annee;
   document.getElementById('creneaux-grid').innerHTML=slots.map(s=>`<div class="creneau" onclick="selCreneau(this,'${s}')">${s}</div>`).join('')||'<p style="font-size:.82rem;color:var(--gris-f)">Aucun créneau ce jour.</p>';
   document.getElementById('creneaux-section').style.display='block';
   document.getElementById('rdv-form-wrap').style.display='none';
-  document.querySelector('.modal').scrollTop=document.getElementById('creneaux-section').offsetTop;
 }
 
 function selCreneau(el,heure){
@@ -594,33 +779,37 @@ function confirmerRDV(){
   const email=document.getElementById('rdv-email').value.trim();
   if(!nom){notif('⚠️ Veuillez renseigner votre nom complet.');return;}
   if(!tel||tel.length<8){notif('⚠️ Numéro de téléphone invalide.');return;}
-  if(email && !/^[^@]+@[^@]+\.[^@]+$/.test(email)){notif('⚠️ Adresse e-mail invalide.');return;}
+  if(email&&!/^[^@]+@[^@]+\.[^@]+$/.test(email)){notif('⚠️ Adresse e-mail invalide.');return;}
   const{avocat,annee,mois,jourSel,creneauSel}=calState;
   const moisNoms=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  document.querySelector('.cal-wrap').style.display='none';
+  document.getElementById('cal-wrap').style.display='none';
   const conf=document.getElementById('rdv-confirm');
   conf.style.display='block';
   document.getElementById('rdv-confirm-txt').innerHTML=
     `Votre rendez-vous avec <strong>${avocat.nom}</strong> est confirmé pour le<br>
      <strong>${jourSel} ${moisNoms[mois]} ${annee} à ${creneauSel}</strong>.<br><br>
-     Une confirmation sera envoyée au <strong>${tel}</strong>.<br>
+     Vous serez contacté(e) au <strong>${tel}</strong>.<br>
      <span style="font-size:.8rem;color:var(--gris-f);margin-top:.5rem;display:block">Cabinet de ${avocat.ville}, Martinique</span>`;
   document.querySelector('.modal').scrollTop=0;
 }
 
-function fermerModal(e){if(e.target===document.getElementById('modal-overlay'))fermerModalBtn();}
+function fermerModal(e){if(e.target===document.getElementById('modal-overlay')) fermerModalBtn();}
 function fermerModalBtn(){
   document.getElementById('modal-overlay').classList.remove('open');
   calState.jourSel=null;calState.creneauSel=null;
 }
 
-// Keyboard accessibility - Escape ferme la modal
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='Escape') fermerModalBtn();
-});
+// Fermeture au clavier
+document.addEventListener('keydown',e=>{if(e.key==='Escape') fermerModalBtn();});
+
+function contacter(nom){
+  notif('✓ Demande envoyée à '+nom+'. Vous serez rappelé(e) sous 24h.');
+}
 
 function notif(msg){
-  const el=document.getElementById('notif');el.innerHTML=msg;el.classList.add('show');
+  const el=document.getElementById('notif');
+  el.innerHTML=msg;
+  el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),4000);
 }
 </script>
